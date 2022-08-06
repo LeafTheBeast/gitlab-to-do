@@ -2,14 +2,23 @@
 
 namespace DataHandling;
 
-use DataHandling\Helpers\ResponsHelper;
-use DataHandling\Models\DataModel;
-
+/**
+ * The DataMapper class for format the given data into an array of instances
+ */
 class DataMapper
 {
-	public function format($url): array
+	/**
+	 * Map the data from the GitLab discussion.json file into a workable format
+	 *
+	 * @param string $url URL of the GitLab merge request
+	 *
+	 * @return array List of DataModel instances
+	 *
+	 * @since 1.0.0
+	 */
+	public function format(string $url): array
 	{
-		$responseArrays = ResponsHelper::getData($url);
+		$responseArrays = \DataHandling\Helpers\ResponsHelper::getData($url);
 		$modelList      = [];
 		
 		
@@ -44,13 +53,15 @@ class DataMapper
 				];
 			}
 			
-			$modelList[] = (new DataModel(
+			$modelList[] = (new \DataHandling\Models\DataModel(
 				$response->note,
 				$response->note_html,
 				$response->resolved,
 				$response->author->name,
 				$paths,
-				$lines
+				$lines,
+				$response->system,
+				$response->emoji_awardable
 			));
 		}
 		

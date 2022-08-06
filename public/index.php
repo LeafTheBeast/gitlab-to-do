@@ -2,17 +2,18 @@
 
 require "C:\laragon\www\gitlab-to-do\\vendor\autoload.php";
 
-	
-/*	function getFetch(string $url)
+$url = 'https://gitlab.com/groenielp/test_project/-/merge_requests/1';
+
+$fileUrl = $url . '/discussions.json?per_page=20';
+
+$new = new \DataHandling\DataMapper();
+
+$test = $new->format($fileUrl);
+
+foreach ($test as $foo)
+{
+	if ($foo->isSystem() === false)
 	{
-		$formatedResponse = json_decode(file_get_contents($url));
-		
-		return $formatedResponse;
+	echo $foo->getNote() . "<br>";
 	}
-	*/
-
-$new = new \DataHandling\DataMapper('https://gitlab.com/groenielp/test_project/-/merge_requests/1/discussions.json?per_page=20');
-
-$test = $new->format('https://gitlab.com/groenielp/test_project/-/merge_requests/1/discussions.json?per_page=20');
-
-var_dump($test);
+}
