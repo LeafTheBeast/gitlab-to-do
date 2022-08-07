@@ -2,18 +2,40 @@
 
 require "C:\laragon\www\gitlab-to-do\\vendor\autoload.php";
 
-$url = 'https://gitlab.com/groenielp/test_project/-/merge_requests/1';
+?>
 
-$fileUrl = $url . '/discussions.json?per_page=20';
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+	      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>GitLab-ToDo</title>
+</head>
+<body>
+<h1>Git Lab - To Do List Maker</h1>
+<form action="index.php" method="post">
+	<input type="text" name="url">
+	<input type="submit" value="Create">
+</form>
 
-$new = new \DataHandling\DataMapper();
+<?php
 
-$test = $new->format($fileUrl);
+echo $_POST['url'];
+
+$check = new \DataHandling\DataMapper();
+
+$add = '/discussions.json?per_page=20';
+
+$list = $check->format($_POST['url'] . $add);
+
 
 foreach ($test as $foo)
 {
-	if ($foo->isSystem() === false)
-	{
 	echo $foo->getNote() . "<br>";
-	}
 }
+?>
+
+</body>
+</html>
