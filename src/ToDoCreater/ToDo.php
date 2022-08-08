@@ -20,16 +20,38 @@ class ToDo
 
 	}
 	
-	public static function readToDoList()
+	public static function readToDoList($fileName):array
 	{
-	
+		$path = static::getSaveFilePath();
+		
+		$fileData = file_get_contents($path . '\\' . $fileName);
+		
+		$format = json_decode($fileData);
+		
+		return $format;
 	}
 	
 	public static function saveToDoList($instanceList, $name = 'name')
 	{
+		$path = static::getSaveFilePath();
+		
 		$saveFilesRaw = scandir(static::getSaveFilePath());
 		
 		$saveFiles = array_diff($saveFilesRaw, ['..', '.']);
+		
+		$encode = [];
+		
+		foreach ($instanceList as $instance)
+		{
+			$encode[] = ['note' => $instance->getNote() ,
+						 'author' => $instance->getAuthor(),
+						 'paths' => $instance->getPaths(),
+						 'lines' => $instance->getLines()];
+		}
+		
+		$jsonFormat = json_encode($encode);
+		
+		
 		
 		if (in_array($name, $saveFiles))
 		{
@@ -37,7 +59,7 @@ class ToDo
 		}
 		else
 		{
-			file_put_contents($name, json_encode($instanceList));
+			file_put_contents($path . '\\' . $name . '.json', $jsonFormat);
 		}
 		
 	}
@@ -66,7 +88,7 @@ class ToDo
 		return $todoItems;
 	}
 	
-	private static function getSaveFilePath(): string
+	public static function getSaveFilePath(): string
 	{
 		$path = dirname(__DIR__, 2) . '\\data\\ToDoSave';
 		
